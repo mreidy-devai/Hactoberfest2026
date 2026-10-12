@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7a3b12">
+<title>Run Club Route Builder</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <h1>Run Club Route Builder</h1>
+  <p class="tag">Tell it what kind of run you want. Get loops. Go outside.</p>
+</header>
+
+<main>
+  <form id="form" autocomplete="off">
+    <label for="ask" class="sr">Describe your run</label>
+    <textarea id="ask" rows="3" placeholder="5K, shaded, fall foliage, starts at Branch Brook Park"></textarea>
+
+    <div class="chips" id="chips" aria-label="Example requests">
+      <button type="button" data-ex="3 miles, lots of trees, starts at the park">3 mi, trees</button>
+      <button type="button" data-ex="5K along the river, starts near Nutley train station">5K, river</button>
+      <button type="button" data-ex="10K, foliage, shaded, from Branch Brook Park, Newark">10K, foliage</button>
+      <button type="button" data-ex="flat 5K with trees, starts at Branch Brook Park, Newark">flat 5K</button>
+    </div>
+
+    <div class="row">
+      <button type="submit" id="go" class="primary">Build routes</button>
+      <button type="button" id="locate" class="ghost">Use my location</button>
+    </div>
+
+    <details class="settings">
+      <summary>Settings (local model)</summary>
+      <label>Default units
+        <select id="units"><option value="mi">miles</option><option value="km">kilometers</option></select>
+      </label>
+      <label>Ollama URL
+        <input id="ollamaUrl" type="url" value="http://localhost:11434" inputmode="url">
+      </label>
+      <label>Model
+        <input id="model" type="text" value="qwen2.5:3b" autocapitalize="off" spellcheck="false">
+      </label>
+      <label>Routing server (optional)
+        <input id="routerUrl" type="url" placeholder="blank = public OSM, or http://localhost:5000" inputmode="url" autocapitalize="off" spellcheck="false">
+      </label>
+      <p class="hint">A self-hosted OSRM keeps your start point off the public router (see selfhost/README.md). Geocoding, tree data and elevation still use public services.</p>
+      <p class="hint">If the local model can't be reached, a simple built-in parser handles the request instead.</p>
+    </details>
+  </form>
+
+  <p id="status" role="status" aria-live="polite"></p>
+
+  <div id="map" aria-label="Route map"></div>
+  <ol id="results" class="results"></ol>
+</main>
+
+<footer>
+  <p>Open pieces: an open-weight model via Ollama, OpenStreetMap data (Overpass, Nominatim, OSM foot routing), Open-Meteo elevation (Copernicus DEM), Leaflet.
+  Tree and park cover is a proxy for foliage and shade, not a live leaf-color reading.</p>
+  <p>Map data &copy; OpenStreetMap contributors.</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
